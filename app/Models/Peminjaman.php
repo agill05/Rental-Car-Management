@@ -16,7 +16,7 @@ class Peminjaman extends Model
         'tanggal_kembali_rencana',
         'lama_sewa',    // Kolom baru
         'harga_total',  // Kolom baru
-        'status'        // Enum: dipinjam, menunggu_persetujuan, dikembalikan
+        'status'        // Enum: dipinjam, menunggu_persetujuan, menunggu_pengembalian, dikembalikan
     ];
 
     public function mobil()

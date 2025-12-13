@@ -17,7 +17,7 @@
             <div class="p-3 bg-yellow-50 text-yellow-600 rounded-lg mr-4"><i class="fas fa-clock fa-lg"></i></div>
             <div>
                 <p class="text-xs text-gray-500 uppercase font-semibold">Sedang Berjalan</p>
-                <p class="text-xl font-bold text-gray-800">{{ $rentals->where('status', 'dipinjam')->count() }}</p>
+                <p class="text-xl font-bold text-gray-800">{{ $rentals->whereIn('status', ['dipinjam', 'menunggu_pengembalian'])->count() }}</p>
             </div>
         </div>
     </div>
@@ -39,7 +39,7 @@
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-800">
                                 <span class="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span> Sedang Dipinjam
                             </span>
-                        @elseif($rental->status == 'menunggu_persetujuan')
+                        @elseif($rental->status == 'menunggu_pengembalian')
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">
                                 <i class="fas fa-hourglass-half mr-2"></i> Menunggu Konfirmasi Pengembalian
                             </span>

@@ -49,6 +49,11 @@ class PengembalianController extends Controller
             return back()->with('error', 'Transaksi ini sudah selesai sebelumnya.');
         }
 
+        // Jika status 'menunggu_pengembalian', ubah ke 'dipinjam' sebelum proses pengembalian
+        if ($peminjaman->status === 'menunggu_pengembalian') {
+            $peminjaman->update(['status' => 'dipinjam']);
+        }
+
         // Hitung Total Bayar Akhir (Server Side Calculation)
         // Total = Harga Awal (Sewa x Hari) + Denda Keterlambatan
         $denda = $request->denda ?? 0;

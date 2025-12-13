@@ -48,5 +48,6 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
     Route::resource('supirs', SupirController::class);
     Route::resource('pelanggans', PelangganController::class);
     Route::resource('peminjaman', PeminjamanController::class);
+    Route::post('peminjaman/{peminjaman}/approve', [PeminjamanController::class, 'approve'])->name('peminjaman.approve');
     Route::resource('pengembalian', PengembalianController::class);
 });

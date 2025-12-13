@@ -92,8 +92,27 @@ class PeminjamanController extends Controller
         if($peminjaman->supir) {
             $peminjaman->supir->update(['status' => 'tersedia']);
         }
-        
+
         $peminjaman->delete();
         return redirect()->route('peminjaman.index')->with('success', 'Data dihapus.');
+    }
+
+    public function approve(Peminjaman $peminjaman)
+    {
+        if ($peminjaman->status !== 'menunggu_persetujuan') {
+            return back()->with('error', 'Peminjaman ini tidak menunggu persetujuan.');
+        }
+
+        $peminjaman->update(['status' => 'dipinjam']);
+
+        if ($peminjaman->mobil) {
+            $peminjaman->mobil->update(['status' => 'disewa']);
+        }
+
+        if ($peminjaman->supir) {
+            $peminjaman->supir->update(['status' => 'bertugas']);
+        }
+
+        return back()->with('success', 'Peminjaman disetujui.');
     }
 }

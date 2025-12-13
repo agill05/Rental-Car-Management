@@ -90,8 +90,12 @@ class UserRentalController extends Controller
             abort(403);
         }
 
-        $peminjaman->update(['status' => 'menunggu_persetujuan']);
+        if ($peminjaman->status !== 'dipinjam') {
+            return back()->with('error', 'Status peminjaman tidak valid untuk pengembalian.');
+        }
 
-        return back()->with('success', 'Permintaan pengembalian dikirim.');
+        $peminjaman->update(['status' => 'menunggu_pengembalian']);
+
+        return back()->with('success', 'Permintaan pengembalian dikirim ke admin.');
     }
 }
