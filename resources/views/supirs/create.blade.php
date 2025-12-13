@@ -30,7 +30,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium mb-1">Foto Supir</label>
-                <input type="file" name="foto" class="w-full border border-gray-300 rounded-lg bg-gray-50 text-sm">
+                <input type="file" name="foto" accept="image/jpeg,image/png,image/gif" class="w-full border border-gray-300 rounded-lg bg-gray-50 text-sm">
                 <p class="text-xs text-gray-500 mt-1">Format: JPG/PNG, Max 2MB.</p>
             </div>
         </div>

@@ -34,10 +34,10 @@
                 <label class="block text-sm font-medium mb-1">Foto Supir</label>
                 @if($supir->foto)
                     <div class="mb-2">
-                        <img src="{{ asset('images/supirs/' . $supir->foto) }}" class="h-20 w-20 rounded-full object-cover border">
+                        <img src="{{ asset('storage/' . $supir->foto) }}" class="h-20 w-20 rounded-full object-cover border">
                     </div>
                 @endif
-                <input type="file" name="foto" class="w-full border border-gray-300 rounded-lg bg-gray-50 text-sm">
+                <input type="file" name="foto" accept="image/jpeg,image/png,image/gif" class="w-full border border-gray-300 rounded-lg bg-gray-50 text-sm">
             </div>
         </div>
 
