@@ -1,0 +1,48 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/* 1. Masukkan Variabel Warna dari Figma di sini (Agar menjadi Utility Class) */
+@theme {
+    /* Font bawaan Laravel */
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* --- TAMBAHAN DARI FIGMA --- */
+    /* Contoh: Figma memberikan warna Primary #0D6EFD */
+    /* Ini akan membuat class: bg-primary, text-primary, border-primary */
+    --color-primary: #0D6EFD;
+    
+    /* Contoh: Warna Secondary #6C757D */
+    --color-secondary: #6C757D;
+    
+    /* Contoh: Warna Background #F3F4F6 */
+    --color-background: #F3F4F6;
+    
+    /* Contoh: Warna Sukses/Warning kustom */
+    --color-success-custom: #198754;
+}
+
+/* 2. Style Kustom (Opsional) */
+/* Jika Anda ingin class Bootstrap (.btn-primary) berubah otomatis mengikuti tema */
+@layer components {
+    .btn-primary {
+        @apply bg-primary text-white border-none px-4 py-2 rounded-lg hover:bg-blue-700 transition;
+    }
+    
+    .card {
+        @apply bg-white shadow-sm border border-gray-200 rounded-xl;
+    }
+}
+
+/* 3. Global Reset (Jika Figma punya warna background khusus untuk body) */
+:root {
+    /* Variable standar CSS juga bisa ditaruh di sini jika tidak ingin masuk ke sistem Tailwind */
+}
+
+body {
+    background-color: var(--color-background); /* Menggunakan variabel dari @theme di atas */
+    font-family: var(--font-sans);
+}
