@@ -111,4 +111,13 @@ class UserRentalController extends Controller
 
         return back()->with('success', 'Permintaan pengembalian dikirim ke admin. Menunggu persetujuan.');
     }
+
+    public function tampilkanKwitansi(Peminjaman $peminjaman)
+    {
+        if ($peminjaman->pelanggan_id != Auth::user()->pelanggan->id) {
+            abort(403);
+        }
+
+        return view('user.kwitansi_penyewaan', compact('peminjaman'));
+    }
 }

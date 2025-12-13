@@ -33,6 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/rent/{mobil}', [UserRentalController::class, 'createRental'])->name('rental.create');
     Route::post('/rent', [UserRentalController::class, 'storeRental'])->name('rental.store');
     Route::post('/return-request/{peminjaman}', [UserRentalController::class, 'requestReturn'])->name('return.request');
+    Route::get('/user/kwitansi-penyewaan/{peminjaman}', [UserRentalController::class, 'tampilkanKwitansi'])->name('user.kwitansi.penyewaan');
 });
 
 
