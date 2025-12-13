@@ -31,7 +31,7 @@ class UserRentalController extends Controller
             ->latest()
             ->get();
 
-        return view('user.my_rentals', compact('rentals'));
+        return view('user.penyewaan_saya', compact('rentals'));
     }
 
     public function createRental(Mobil $mobil)
@@ -41,7 +41,7 @@ class UserRentalController extends Controller
         }
 
         $supirs = Supir::where('status', 'tersedia')->get();
-        return view('user.rental_create', compact('mobil', 'supirs'));
+        return view('user.buat_penyewaan', compact('mobil', 'supirs'));
     }
 
     public function storeRental(Request $request)

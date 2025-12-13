@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto">
-    {{-- Breadcrumb / Back Button --}}
+    {{-- Breadcrumb / Tombol Kembali --}}
     <a href="{{ route('home') }}" class="inline-flex items-center text-gray-500 hover:text-blue-600 mb-6 transition">
         <i class="fas fa-arrow-left mr-2"></i> Kembali ke Katalog
     </a>

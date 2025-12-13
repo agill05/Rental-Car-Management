@@ -4,7 +4,7 @@
 <div class="max-w-5xl mx-auto">
     <h1 class="text-2xl font-bold text-gray-800 mb-6">Riwayat Peminjaman Saya</h1>
 
-    {{-- Stats Cards Ringkas --}}
+    {{-- Kartu Statistik Ringkas --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center">
             <div class="p-3 bg-blue-50 text-blue-600 rounded-lg mr-4"><i class="fas fa-car fa-lg"></i></div>
@@ -26,10 +26,10 @@
     <div class="space-y-6">
         @forelse($rentals as $rental)
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition duration-200">
-                {{-- Header Card --}}
+                {{-- Header Kartu --}}
                 <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex flex-col md:flex-row justify-between md:items-center gap-4">
                     <div class="flex items-center gap-3">
-                        <span class="text-gray-500 text-sm">Order #{{ $rental->id }}</span>
+                        <span class="text-gray-500 text-sm">Pesanan #{{ $rental->id }}</span>
                         <span class="text-gray-300">|</span>
                         <span class="text-gray-600 text-sm font-medium">{{ \Carbon\Carbon::parse($rental->created_at)->format('d M Y') }}</span>
                     </div>
@@ -59,11 +59,11 @@
                     </div>
                 </div>
 
-                {{-- Body Card --}}
+                {{-- Body Kartu --}}
                 <div class="p-6 grid grid-cols-1 md:grid-cols-4 gap-6">
                     {{-- Info Mobil --}}
                     <div class="md:col-span-2 flex gap-4">
-                        {{-- FIX: Changed flex-shrink-0 to shrink-0 --}}
+                        {{-- PERBAIKAN: Mengubah flex-shrink-0 menjadi shrink-0 --}}
                         <div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center shrink-0 text-gray-400">
                             <i class="fas fa-car text-3xl"></i>
                         </div>
