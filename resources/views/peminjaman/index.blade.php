@@ -43,6 +43,8 @@
                             <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">Sedang Dipinjam</span>
                         @elseif($pinjam->status == 'menunggu_persetujuan')
                             <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Menunggu Persetujuan</span>
+                        @elseif($pinjam->status == 'menunggu_persetujuan_pengembalian')
+                            <span class="bg-orange-100 text-orange-800 text-xs font-medium px-2.5 py-0.5 rounded">Menunggu Persetujuan Pengembalian</span>
                         @elseif($pinjam->status == 'menunggu_pengembalian')
                             <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded">Menunggu Pengembalian</span>
                         @else
@@ -56,6 +58,13 @@
                             </a>
                             @if($pinjam->status == 'menunggu_persetujuan')
                                 <form action="{{ route('peminjaman.approve', $pinjam->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" class="px-3 py-2 text-sm font-medium text-green-600 bg-white border border-gray-200 hover:bg-green-50 hover:text-green-700">
+                                        <i class="fas fa-check"></i> Setujui
+                                    </button>
+                                </form>
+                            @elseif($pinjam->status == 'menunggu_persetujuan_pengembalian')
+                                <form action="{{ route('peminjaman.approve.return', $pinjam) }}" method="POST" class="inline">
                                     @csrf
                                     <button type="submit" class="px-3 py-2 text-sm font-medium text-green-600 bg-white border border-gray-200 hover:bg-green-50 hover:text-green-700">
                                         <i class="fas fa-check"></i> Setujui

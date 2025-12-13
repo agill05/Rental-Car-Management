@@ -39,6 +39,14 @@
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-800">
                                 <span class="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span> Sedang Dipinjam
                             </span>
+                        @elseif($rental->status == 'menunggu_persetujuan')
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-800">
+                                <i class="fas fa-clock mr-2"></i> Menunggu Persetujuan Admin
+                            </span>
+                        @elseif($rental->status == 'menunggu_persetujuan_pengembalian')
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-800">
+                                <i class="fas fa-clock mr-2"></i> Menunggu Persetujuan Pengembalian
+                            </span>
                         @elseif($rental->status == 'menunggu_pengembalian')
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">
                                 <i class="fas fa-hourglass-half mr-2"></i> Menunggu Konfirmasi Pengembalian

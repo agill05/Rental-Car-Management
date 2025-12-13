@@ -14,7 +14,7 @@
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-24">
                 <div class="h-48 bg-gray-100 flex items-center justify-center">
                     @if($mobil->gambar)
-                        <img src="{{ asset('images/mobils/' . $mobil->gambar) }}" alt="{{ $mobil->nama_mobil }}" class="w-full h-full object-cover">
+                        <img src="{{ asset('storage/' . $mobil->gambar) }}" alt="{{ $mobil->nama_mobil }}" class="w-full h-full object-cover">
                     @else
                         <i class="fas fa-car text-gray-300 text-6xl"></i>
                     @endif

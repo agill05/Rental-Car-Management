@@ -14,7 +14,9 @@ class Pengembalian extends Model
         'tanggal_kembali_aktual',
         'denda',
         'total_bayar_akhir',
-        'catatan_kondisi'
+        'catatan_kondisi',
+        'status_pembayaran',
+        'biaya_kerusakan'
     ];
 
     public function peminjaman()

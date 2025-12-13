@@ -36,7 +36,7 @@ class UserRentalController extends Controller
 
     public function createRental(Mobil $mobil)
     {
-        if($mobil->status !== 'tersedia') {
+        if ($mobil->status !== 'tersedia') {
             return back()->with('error', 'Mobil ini tidak tersedia.');
         }
 
@@ -53,15 +53,30 @@ class UserRentalController extends Controller
         ]);
 
         $mobil = Mobil::find($request->mobil_id);
-        
+
+        // Check for overlapping rentals
+        $overlapping = Peminjaman::where('mobil_id', $request->mobil_id)
+            ->whereIn('status', ['dipinjam', 'menunggu_persetujuan', 'terlambat'])
+            ->where(function ($query) use ($request) {
+                $query->whereBetween('tanggal_pinjam', [$request->tanggal_pinjam, date('Y-m-d', strtotime($request->tanggal_pinjam . ' + ' . $request->lama_sewa . ' days'))])
+                    ->orWhereBetween('tanggal_kembali_rencana', [$request->tanggal_pinjam, date('Y-m-d', strtotime($request->tanggal_pinjam . ' + ' . $request->lama_sewa . ' days'))]);
+            })
+            ->exists();
+
+        if ($overlapping) {
+            return back()->with('error', 'Mobil sudah dipesan pada tanggal tersebut.');
+        }
+
         $biaya_mobil = $mobil->harga_per_hari;
         $biaya_supir = 0;
 
         if ($request->supir_id) {
             $supir = Supir::find($request->supir_id);
-            if($supir) {
+            if ($supir && $supir->status === 'tersedia') {
                 $biaya_supir = $supir->tarif_per_hari;
                 $supir->update(['status' => 'bertugas']);
+            } else {
+                return back()->with('error', 'Supir tidak tersedia.');
             }
         }
 
@@ -76,12 +91,10 @@ class UserRentalController extends Controller
             'tanggal_kembali_rencana' => $tgl_kembali,
             'lama_sewa' => $request->lama_sewa,
             'harga_total' => $total,
-            'status' => 'dipinjam'
+            'status' => 'menunggu_persetujuan'
         ]);
 
-        $mobil->update(['status' => 'disewa']);
-
-        return redirect()->route('my.rentals')->with('success', 'Mobil berhasil disewa!');
+        return redirect()->route('my.rentals')->with('success', 'Permintaan sewa berhasil dikirim. Menunggu persetujuan admin.');
     }
 
     public function requestReturn(Peminjaman $peminjaman)
@@ -94,8 +107,8 @@ class UserRentalController extends Controller
             return back()->with('error', 'Status peminjaman tidak valid untuk pengembalian.');
         }
 
-        $peminjaman->update(['status' => 'menunggu_pengembalian']);
+        $peminjaman->update(['status' => 'menunggu_persetujuan_pengembalian']);
 
-        return back()->with('success', 'Permintaan pengembalian dikirim ke admin.');
+        return back()->with('success', 'Permintaan pengembalian dikirim ke admin. Menunggu persetujuan.');
     }
 }

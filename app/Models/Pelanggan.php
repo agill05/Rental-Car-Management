@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pelanggan extends Model
 {
     protected $fillable = [
-        'user_id', // PENTING: Untuk menghubungkan dengan tabel users
+        'user_id',
         'nama',
         'nik',
         'no_hp',

@@ -49,6 +49,17 @@
             <i class="fas fa-calendar-check fa-lg"></i>
         </div>
     </div>
+
+    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex items-center justify-between">
+        <div>
+            <p class="text-sm font-medium text-gray-500 mb-1">Menunggu Persetujuan</p>
+            <h3 class="text-3xl font-bold text-gray-800">{{ \App\Models\Peminjaman::where('status', 'menunggu_persetujuan')->count() }}</h3>
+            <span class="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded-full mt-2 inline-block">Perlu Review</span>
+        </div>
+        <div class="p-3 bg-orange-50 rounded-lg text-orange-600">
+            <i class="fas fa-clock fa-lg"></i>
+        </div>
+    </div>
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -74,6 +85,8 @@
                         <td class="px-6 py-3">
                             @if($peminjaman->status == 'dipinjam')
                                 <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">Dipinjam</span>
+                            @elseif($peminjaman->status == 'menunggu_persetujuan')
+                                <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Menunggu Persetujuan</span>
                             @else
                                 <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Selesai</span>
                             @endif

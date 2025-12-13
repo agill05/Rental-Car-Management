@@ -115,4 +115,40 @@ class PeminjamanController extends Controller
 
         return back()->with('success', 'Peminjaman disetujui.');
     }
+
+    public function approveReturn(Peminjaman $peminjaman)
+    {
+        if ($peminjaman->status !== 'menunggu_persetujuan_pengembalian') {
+            return back()->with('error', 'Pengembalian ini tidak menunggu persetujuan.');
+        }
+
+        // Hitung biaya akhir (seperti di PengembalianController)
+        $denda = $peminjaman->calculateFine();
+        $biaya_kerusakan = 0; // Default 0, bisa diubah admin nanti jika perlu
+        $total_akhir = $peminjaman->harga_total + $denda + $biaya_kerusakan;
+
+        // 1. Simpan data pengembalian
+        \App\Models\Pengembalian::create([
+            'peminjaman_id' => $peminjaman->id,
+            'tanggal_kembali_aktual' => now(),
+            'denda' => $denda,
+            'total_bayar_akhir' => $total_akhir,
+            'catatan_kondisi' => 'Pengembalian disetujui admin - kondisi baik',
+        ]);
+
+        // 2. Update status peminjaman menjadi selesai
+        $peminjaman->update(['status' => 'dikembalikan']);
+
+        // 3. Update mobil kembali tersedia
+        if ($peminjaman->mobil) {
+            $peminjaman->mobil->update(['status' => 'tersedia']);
+        }
+
+        // 4. Update supir kembali tersedia (jika ada)
+        if ($peminjaman->supir) {
+            $peminjaman->supir->update(['status' => 'tersedia']);
+        }
+
+        return back()->with('success', 'Pengembalian disetujui dan diproses. Mobil kini tersedia kembali.');
+    }
 }

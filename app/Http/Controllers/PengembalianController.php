@@ -21,15 +21,14 @@ class PengembalianController extends Controller
 
     public function create()
     {
-        // Admin bisa memproses peminjaman yang statusnya 'dipinjam' 
-        // ATAU 'menunggu_persetujuan' (yang diajukan user)
-        $peminjamans = Peminjaman::whereIn('status', ['dipinjam', 'menunggu_persetujuan'])
+        // Admin bisa memproses peminjaman yang statusnya 'dipinjam', 'menunggu_persetujuan', atau 'menunggu_pengembalian'
+        $peminjamans = Peminjaman::whereIn('status', ['dipinjam', 'menunggu_persetujuan', 'menunggu_pengembalian'])
             ->with('pelanggan', 'mobil')
             ->get();
-            
+
         // Jika ada parameter 'peminjaman_id' dari URL (misal dari tombol di dashboard/detail), kirim ke view
         // View create akan otomatis memilih opsi tersebut
-        
+
         return view('pengembalian.create', compact('peminjamans'));
     }
 
@@ -38,7 +37,8 @@ class PengembalianController extends Controller
         $request->validate([
             'peminjaman_id' => 'required|exists:peminjaman,id',
             'tanggal_kembali_aktual' => 'required|date',
-            'denda' => 'nullable|numeric|min:0',
+            'biaya_kerusakan' => 'nullable|numeric|min:0',
+            'status_pembayaran' => 'required|in:belum_bayar,sudah_bayar',
             'catatan_kondisi' => 'nullable|string',
         ]);
 
@@ -55,9 +55,10 @@ class PengembalianController extends Controller
         }
 
         // Hitung Total Bayar Akhir (Server Side Calculation)
-        // Total = Harga Awal (Sewa x Hari) + Denda Keterlambatan
-        $denda = $request->denda ?? 0;
-        $total_akhir = $peminjaman->harga_total + $denda;
+        // Total = Harga Awal (Sewa x Hari) + Denda Keterlambatan + Biaya Kerusakan
+        $denda = $peminjaman->calculateFine(); // Auto calculate based on overdue days
+        $biaya_kerusakan = $request->biaya_kerusakan ?? 0;
+        $total_akhir = $peminjaman->harga_total + $denda + $biaya_kerusakan;
 
         // 1. Simpan Data Pengembalian
         Pengembalian::create([
@@ -98,15 +99,24 @@ class PengembalianController extends Controller
     {
         $request->validate([
             'tanggal_kembali_aktual' => 'required|date',
-            'denda' => 'nullable|numeric|min:0',
+            'biaya_kerusakan' => 'nullable|numeric|min:0',
+            'status_pembayaran' => 'required|in:belum_bayar,sudah_bayar',
             'total_bayar_akhir' => 'required|numeric|min:0', // Admin bisa override total manual jika perlu
             'catatan_kondisi' => 'nullable|string',
         ]);
 
+        // Recalculate denda if date changed
+        $peminjaman = $pengembalian->peminjaman;
+        $denda = $peminjaman->calculateFine();
+        $biaya_kerusakan = $request->biaya_kerusakan ?? 0;
+        $total_akhir = $peminjaman->harga_total + $denda + $biaya_kerusakan;
+
         $pengembalian->update([
             'tanggal_kembali_aktual' => $request->tanggal_kembali_aktual,
-            'denda' => $request->denda ?? 0,
-            'total_bayar_akhir' => $request->total_bayar_akhir,
+            'denda' => $denda,
+            'biaya_kerusakan' => $biaya_kerusakan,
+            'status_pembayaran' => $request->status_pembayaran,
+            'total_bayar_akhir' => $total_akhir,
             'catatan_kondisi' => $request->catatan_kondisi
         ]);
 

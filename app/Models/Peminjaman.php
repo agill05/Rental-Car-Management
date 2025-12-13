@@ -39,4 +39,21 @@ class Peminjaman extends Model
     {
         return $this->hasOne(Pengembalian::class);
     }
+
+    // Method to check if rental is overdue
+    public function isOverdue()
+    {
+        return now()->gt(\Carbon\Carbon::parse($this->tanggal_kembali_rencana));
+    }
+
+    // Method to calculate fine for overdue days
+    public function calculateFine()
+    {
+        if (!$this->isOverdue()) {
+            return 0;
+        }
+
+        $overdueDays = \Carbon\Carbon::parse($this->tanggal_kembali_rencana)->diffInDays(now());
+        return $overdueDays * 50000; // 50,000 per day
+    }
 }
