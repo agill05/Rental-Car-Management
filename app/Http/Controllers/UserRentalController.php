@@ -5,18 +5,32 @@ namespace App\Http\Controllers;
 use App\Models\Mobil;
 use App\Models\Supir;
 use App\Models\Peminjaman;
+use App\Models\Merek;
+use App\Models\JenisMobil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserRentalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $mobils = Mobil::with('merek', 'jenisMobil')
-            ->where('status', 'tersedia')
-            ->latest()
-            ->get();
-        return view('home', compact('mobils'));
+        $query = Mobil::with('merek', 'jenisMobil')
+            ->where('status', 'tersedia');
+
+        if ($request->filled('merek_id')) {
+            $query->where('merek_id', $request->merek_id);
+        }
+
+        if ($request->filled('jenis_id')) {
+            $query->where('jenis_mobil_id', $request->jenis_id);
+        }
+
+        $mobils = $query->latest()->get();
+
+        $mereks = Merek::all();
+        $jenis_mobils = JenisMobil::all();
+
+        return view('home', compact('mobils', 'mereks', 'jenis_mobils'));
     }
 
     public function myRentals()

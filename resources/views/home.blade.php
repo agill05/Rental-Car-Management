@@ -29,25 +29,27 @@
     </div>
 </div>
 
-{{-- Search / Filter Section (Opsional - Tampilan Saja) --}}
-<div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-10 flex flex-col md:flex-row gap-4 items-center justify-between" id="katalog">
+{{-- Search / Filter Section --}}
+<form method="GET" action="{{ route('home') }}" class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-10 flex flex-col md:flex-row gap-4 items-center justify-between" id="katalog">
     <div class="flex items-center gap-2 text-gray-500">
         <i class="fas fa-filter"></i>
         <span class="font-medium">Filter Kendaraan</span>
     </div>
     <div class="w-full md:w-auto flex gap-2">
-        <select class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            <option>Semua Merek</option>
-            <option>Toyota</option>
-            <option>Honda</option>
+        <select name="merek_id" class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 filter-select">
+            <option value="">Semua Merek</option>
+            @foreach($mereks as $merek)
+                <option value="{{ $merek->id }}" {{ request('merek_id') == $merek->id ? 'selected' : '' }}>{{ $merek->nama_merek }}</option>
+            @endforeach
         </select>
-        <select class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            <option>Semua Tipe</option>
-            <option>SUV</option>
-            <option>MPV</option>
+        <select name="jenis_id" class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 filter-select">
+            <option value="">Semua Tipe</option>
+            @foreach($jenis_mobils as $jenis)
+                <option value="{{ $jenis->id }}" {{ request('jenis_id') == $jenis->id ? 'selected' : '' }}>{{ $jenis->nama_jenis }}</option>
+            @endforeach
         </select>
     </div>
-</div>
+</form>
 
 {{-- Katalog Mobil --}}
 <div class="mb-6">
@@ -118,4 +120,15 @@
     </div>
     @endforelse
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterSelects = document.querySelectorAll('.filter-select');
+    filterSelects.forEach(select => {
+        select.addEventListener('change', function() {
+            this.closest('form').submit();
+        });
+    });
+});
+</script>
 @endsection
