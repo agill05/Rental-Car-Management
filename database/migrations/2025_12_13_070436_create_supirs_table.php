@@ -11,7 +11,10 @@ return new class extends Migration
         Schema::create('supirs', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->string('nik')->unique();
             $table->string('no_hp');
+            $table->text('alamat');
+            $table->decimal('tarif_per_hari', 10, 2);
             $table->enum('status', ['tersedia', 'bertugas'])->default('tersedia');
             $table->string('foto')->nullable();
             $table->timestamps();

@@ -111,7 +111,7 @@
                                     Menunggu Admin
                                 </button>
                             @elseif($rental->status == 'dikembalikan')
-                                <a href="{{ route('user.kwitansi.penyewaan', $rental->id) }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium hover:underline">
+                                <a href="{{ route('user.kwitansi.penyewaan', $rental->id) }}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm font-medium hover:underline">
                                     Lihat Invoice
                                 </a>
                             @endif

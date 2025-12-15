@@ -15,6 +15,8 @@ return new class extends Migration
             $table->decimal('denda', 12, 2)->default(0); 
             $table->decimal('total_bayar_akhir', 12, 2); 
             $table->text('catatan_kondisi')->nullable(); 
+            $table->enum('status_pembayaran', ['belum_bayar', 'sudah_bayar'])->default('belum_bayar');
+            $table->decimal('biaya_kerusakan', 12, 2)->default(0);
             $table->timestamps();
         });
     }
