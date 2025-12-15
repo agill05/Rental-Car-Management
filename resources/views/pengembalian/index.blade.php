@@ -18,6 +18,7 @@
                     <th class="px-6 py-3">Peminjam</th>
                     <th class="px-6 py-3">Tgl Kembali</th>
                     <th class="px-6 py-3">Status Waktu</th>
+                    <th class="px-6 py-3">Status Pembayaran</th>
                     <th class="px-6 py-3">Total Bayar</th>
                     <th class="px-6 py-3 text-center">Aksi</th>
                 </tr>
@@ -43,6 +44,13 @@
                         <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Telat {{ $diff }} Hari</span>
                         @else
                         <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Tepat Waktu</span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-4">
+                        @if($kembali->status_pembayaran == 'sudah_bayar')
+                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Sudah Bayar</span>
+                        @else
+                        <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Belum Bayar</span>
                         @endif
                     </td>
                     <td class="px-6 py-4 font-bold text-green-600">Rp {{ number_format($kembali->total_bayar_akhir, 0, ',', '.') }}</td>
@@ -82,7 +90,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="px-6 py-8 text-center text-gray-500">Belum ada data pengembalian.</td>
+                    <td colspan="8" class="px-6 py-8 text-center text-gray-500">Belum ada data pengembalian.</td>
                 </tr>
                 @endforelse
             </tbody>
