@@ -32,7 +32,8 @@ class PengembalianController extends Controller
         $request->validate([
             'peminjaman_id' => 'required|exists:peminjaman,id',
             'tanggal_kembali_aktual' => 'required|date',
-            'biaya_kerusakan' => 'nullable|numeric|min:0',
+            'denda' => 'nullable|numeric|min:0',
+            'total_bayar_akhir' => 'required|numeric|min:0',
             'status_pembayaran' => 'required|in:belum_bayar,sudah_bayar',
             'catatan_kondisi' => 'nullable|string',
         ]);
@@ -47,15 +48,13 @@ class PengembalianController extends Controller
             $peminjaman->update(['status' => 'dipinjam']);
         }
 
-        $denda = $peminjaman->calculateFine();
-        $biaya_kerusakan = $request->biaya_kerusakan ?? 0;
-        $total_akhir = $peminjaman->harga_total + $denda + $biaya_kerusakan;
-
         Pengembalian::create([
             'peminjaman_id' => $peminjaman->id,
             'tanggal_kembali_aktual' => $request->tanggal_kembali_aktual,
-            'denda' => $denda,
-            'total_bayar_akhir' => $total_akhir,
+            'denda' => $request->denda,
+            'total_bayar_akhir' => $request->total_bayar_akhir,
+            'status_pembayaran' => $request->status_pembayaran,
+            'biaya_kerusakan' => 0,
             'catatan_kondisi' => $request->catatan_kondisi,
         ]);
 
@@ -88,7 +87,7 @@ class PengembalianController extends Controller
             'tanggal_kembali_aktual' => 'required|date',
             'biaya_kerusakan' => 'nullable|numeric|min:0',
             'status_pembayaran' => 'required|in:belum_bayar,sudah_bayar',
-            'total_bayar_akhir' => 'required|numeric|min:0', 
+            'total_bayar_akhir' => 'required|numeric|min:0',
             'catatan_kondisi' => 'nullable|string',
         ]);
 
@@ -126,7 +125,7 @@ class PengembalianController extends Controller
         }
 
         $pengembalian->delete();
-        
+
         return redirect()->route('pengembalian.index')->with('success', 'Data pengembalian dihapus. Status transaksi kembali menjadi dipinjam.');
     }
 }

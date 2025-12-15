@@ -1,4 +1,4 @@
-@extends('layouts.app')
+ @extends('layouts.app')
 
 @section('content')
 <div class="max-w-6xl mx-auto">
@@ -103,6 +103,8 @@
                         </div>
                     </div>
                 </div>
+
+                <input type="hidden" name="status_pembayaran" value="sudah_bayar">
 
                 <div class="flex justify-end mt-8 pt-6 border-t border-gray-100">
                     <button type="submit" class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-lg px-8 py-3 flex items-center gap-2 shadow-lg hover:shadow-xl transition duration-200">
