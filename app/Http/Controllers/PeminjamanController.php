@@ -33,7 +33,6 @@ class PeminjamanController extends Controller
             'lama_sewa' => 'required|integer|min:1',
         ]);
 
-        // Logika hitung manual untuk Admin
         $mobil = Mobil::find($request->mobil_id);
         $harga_supir = 0;
 
@@ -54,7 +53,7 @@ class PeminjamanController extends Controller
             'tanggal_kembali_rencana' => $tgl_kembali,
             'lama_sewa' => $request->lama_sewa,
             'harga_total' => $total,
-            'status' => 'dipinjam' // Default status
+            'status' => 'dipinjam' 
         ]);
 
         $mobil->update(['status' => 'disewa']);
@@ -69,7 +68,7 @@ class PeminjamanController extends Controller
 
     public function edit(Peminjaman $peminjaman)
     {
-        $mobils = Mobil::all(); // Tampilkan semua untuk edit (hati-hati logika status)
+        $mobils = Mobil::all(); 
         $pelanggans = Pelanggan::all();
         $supirs = Supir::all();
         return view('peminjaman.edit', compact('peminjaman', 'mobils', 'pelanggans', 'supirs'));
@@ -77,14 +76,12 @@ class PeminjamanController extends Controller
 
     public function update(Request $request, Peminjaman $peminjaman)
     {
-        // Fitur update data transaksi (jika admin salah input)
         $peminjaman->update($request->all());
         return redirect()->route('peminjaman.index')->with('success', 'Data peminjaman diperbarui.');
     }
 
     public function destroy(Peminjaman $peminjaman)
     {
-        // Reset status mobil jika dihapus paksa
         if($peminjaman->mobil) {
             $peminjaman->mobil->update(['status' => 'tersedia']);
         }
@@ -121,12 +118,10 @@ class PeminjamanController extends Controller
             return back()->with('error', 'Pengembalian ini tidak menunggu persetujuan.');
         }
 
-        // Hitung biaya akhir (seperti di PengembalianController)
         $denda = $peminjaman->calculateFine();
-        $biaya_kerusakan = 0; // Default 0, bisa diubah admin nanti jika perlu
+        $biaya_kerusakan = 0; 
         $total_akhir = $peminjaman->harga_total + $denda + $biaya_kerusakan;
 
-        // 1. Simpan data pengembalian
         \App\Models\Pengembalian::create([
             'peminjaman_id' => $peminjaman->id,
             'tanggal_kembali_aktual' => now(),
@@ -135,15 +130,12 @@ class PeminjamanController extends Controller
             'catatan_kondisi' => 'Pengembalian disetujui admin - kondisi baik',
         ]);
 
-        // 2. Update status peminjaman menjadi selesai
         $peminjaman->update(['status' => 'dikembalikan']);
 
-        // 3. Update mobil kembali tersedia
         if ($peminjaman->mobil) {
             $peminjaman->mobil->update(['status' => 'tersedia']);
         }
 
-        // 4. Update supir kembali tersedia (jika ada)
         if ($peminjaman->supir) {
             $peminjaman->supir->update(['status' => 'tersedia']);
         }
