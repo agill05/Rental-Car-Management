@@ -88,7 +88,7 @@ class PengembalianController extends Controller
             'tanggal_kembali_aktual' => 'required|date',
             'biaya_kerusakan' => 'nullable|numeric|min:0',
             'status_pembayaran' => 'required|in:belum_bayar,sudah_bayar',
-            'total_bayar_akhir' => 'required|numeric|min:0', // Admin bisa override total manual jika perlu
+            'total_bayar_akhir' => 'required|numeric|min:0', 
             'catatan_kondisi' => 'nullable|string',
         ]);
 
