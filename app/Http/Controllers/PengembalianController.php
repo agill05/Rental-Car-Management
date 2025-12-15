@@ -78,11 +78,27 @@ class PengembalianController extends Controller
 
     public function edit(Pengembalian $pengembalian)
     {
+        $createdAt = Carbon::parse($pengembalian->created_at);
+        $now = Carbon::now();
+        $minutesDiff = $createdAt->diffInMinutes($now);
+
+        if ($minutesDiff > 30) {
+            return redirect()->route('pengembalian.index')->with('error', 'Data pengembalian sudah terkunci. Edit hanya diperbolehkan dalam 30 menit setelah pembuatan.');
+        }
+
         return view('pengembalian.edit', compact('pengembalian'));
     }
 
     public function update(Request $request, Pengembalian $pengembalian)
     {
+        $createdAt = Carbon::parse($pengembalian->created_at);
+        $now = Carbon::now();
+        $minutesDiff = $createdAt->diffInMinutes($now);
+
+        if ($minutesDiff > 30) {
+            return redirect()->route('pengembalian.index')->with('error', 'Data pengembalian sudah terkunci. Update hanya diperbolehkan dalam 30 menit setelah pembuatan.');
+        }
+
         $request->validate([
             'tanggal_kembali_aktual' => 'required|date',
             'biaya_kerusakan' => 'nullable|numeric|min:0',

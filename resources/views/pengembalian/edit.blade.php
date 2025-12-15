@@ -27,11 +27,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
                         <label for="tanggal_kembali_aktual" class="block mb-2 text-sm font-medium text-gray-900">Tanggal Kembali</label>
-                        <input type="date" id="tanggal_kembali_aktual" name="tanggal_kembali_aktual" value="{{ old('tanggal_kembali_aktual', $pengembalian->tanggal_kembali_aktual) }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5">
+                        <input type="date" id="tanggal_kembali_aktual" name="tanggal_kembali_aktual" value="{{ old('tanggal_kembali_aktual', $pengembalian->tanggal_kembali_aktual) }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5" required>
                     </div>
                     <div>
-                        <label for="denda" class="block mb-2 text-sm font-medium text-gray-900">Denda (Rp)</label>
-                        <input type="number" id="denda" name="denda" value="{{ old('denda', $pengembalian->denda) }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5">
+                        <label for="biaya_kerusakan" class="block mb-2 text-sm font-medium text-gray-900">Biaya Kerusakan (Rp)</label>
+                        <input type="number" id="biaya_kerusakan" name="biaya_kerusakan" value="{{ old('biaya_kerusakan', $pengembalian->biaya_kerusakan ?? 0) }}" min="0" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5">
                     </div>
                 </div>
 
@@ -42,9 +42,19 @@
                 </div>
 
                 <div class="mb-6">
+                    <label for="status_pembayaran" class="block mb-2 text-sm font-medium text-gray-900">Status Pembayaran</label>
+                    <select id="status_pembayaran" name="status_pembayaran" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5" required>
+                        <option value="belum_bayar" {{ old('status_pembayaran', $pengembalian->status_pembayaran) == 'belum_bayar' ? 'selected' : '' }}>Belum Bayar</option>
+                        <option value="sudah_bayar" {{ old('status_pembayaran', $pengembalian->status_pembayaran) == 'sudah_bayar' ? 'selected' : '' }}>Sudah Bayar</option>
+                    </select>
+                </div>
+
+                <div class="mb-6">
                     <label for="catatan_kondisi" class="block mb-2 text-sm font-medium text-gray-900">Catatan Kondisi</label>
                     <textarea id="catatan_kondisi" name="catatan_kondisi" rows="3" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5">{{ old('catatan_kondisi', $pengembalian->catatan_kondisi) }}</textarea>
                 </div>
+
+                <input type="hidden" name="denda" value="{{ $pengembalian->denda }}">
 
                 <div class="flex justify-end pt-6 border-t border-gray-100">
                     <button type="submit" class="text-white bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-lg px-8 py-2.5 flex items-center gap-2 shadow transition">

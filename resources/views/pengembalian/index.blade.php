@@ -34,15 +34,15 @@
                     <td class="px-6 py-4">{{ \Carbon\Carbon::parse($kembali->tanggal_kembali_aktual)->format('d/m/Y') }}</td>
                     <td class="px-6 py-4">
                         @php
-                            $rencana = \Carbon\Carbon::parse($kembali->peminjaman->tanggal_kembali_rencana);
-                            $aktual = \Carbon\Carbon::parse($kembali->tanggal_kembali_aktual);
-                            $diff = $rencana->diffInDays($aktual, false);
+                        $rencana = \Carbon\Carbon::parse($kembali->peminjaman->tanggal_kembali_rencana);
+                        $aktual = \Carbon\Carbon::parse($kembali->tanggal_kembali_aktual);
+                        $diff = $rencana->diffInDays($aktual, false);
                         @endphp
-                        
+
                         @if($diff > 0)
-                            <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Telat {{ $diff }} Hari</span>
+                        <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Telat {{ $diff }} Hari</span>
                         @else
-                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Tepat Waktu</span>
+                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Tepat Waktu</span>
                         @endif
                     </td>
                     <td class="px-6 py-4 font-bold text-green-600">Rp {{ number_format($kembali->total_bayar_akhir, 0, ',', '.') }}</td>
@@ -51,6 +51,16 @@
                             <a href="{{ route('pengembalian.show', $kembali->id) }}" class="px-3 py-2 text-sm font-medium text-blue-600 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700">
                                 <i class="fas fa-eye"></i>
                             </a>
+                            @php
+                                $createdAt = \Carbon\Carbon::parse($kembali->created_at);
+                                $now = \Carbon\Carbon::now();
+                                $minutesDiff = $createdAt->diffInMinutes($now);
+                                $canEdit = $minutesDiff <= 30;
+                            @endphp
+                            @if($canEdit)
+                            <a href="{{ route('pengembalian.edit', $kembali->id) }}" class="px-3 py-2 text-sm font-medium text-yellow-600 bg-white border border-gray-200 hover:bg-gray-100 hover:text-yellow-700">
+                                <i class="fas fa-edit"></i>
+                            </a>
                             <form action="{{ route('pengembalian.destroy', $kembali->id) }}" method="POST" class="inline" onsubmit="return confirm('Batalkan pengembalian ini? Status mobil akan kembali menjadi Disewa.');">
                                 @csrf
                                 @method('DELETE')
@@ -58,6 +68,15 @@
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </form>
+                            @else
+                            <form action="{{ route('pengembalian.destroy', $kembali->id) }}" method="POST" class="inline" onsubmit="return confirm('Batalkan pengembalian ini? Status mobil akan kembali menjadi Disewa.');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="px-3 py-2 text-sm font-medium text-red-600 bg-white border border-gray-200 rounded-r-lg hover:bg-red-50 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                            @endif
                         </div>
                     </td>
                 </tr>
