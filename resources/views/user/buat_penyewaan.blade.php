@@ -8,15 +8,15 @@
     </a>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
+
         {{-- Kolom Kiri: Info Mobil --}}
         <div class="lg:col-span-1">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-24">
                 <div class="h-48 bg-gray-100 flex items-center justify-center">
                     @if($mobil->gambar)
-                        <img src="{{ asset('storage/' . $mobil->gambar) }}" alt="{{ $mobil->nama_mobil }}" class="w-full h-full object-cover">
+                    <img src="{{ asset('storage/' . $mobil->gambar) }}" alt="{{ $mobil->nama_mobil }}" class="w-full h-full object-cover">
                     @else
-                        <i class="fas fa-car text-gray-300 text-6xl"></i>
+                    <i class="fas fa-car text-gray-300 text-6xl"></i>
                     @endif
                 </div>
                 <div class="p-6">
@@ -30,7 +30,7 @@
                         </span>
                         <span class="text-sm text-gray-500">{{ $mobil->tahun }}</span>
                     </div>
-                    
+
                     <div class="border-t border-gray-100 pt-4">
                         <p class="text-sm text-gray-500 mb-1">Harga Sewa Dasar</p>
                         <p class="text-xl font-bold text-blue-600">
@@ -61,7 +61,7 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-calendar-alt text-gray-400"></i>
                                 </div>
-                                <input type="date" name="tanggal_pinjam" id="tanggal_pinjam" 
+                                <input type="date" name="tanggal_pinjam" id="tanggal_pinjam"
                                     class="pl-10 w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
                                     value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}" required>
                             </div>
@@ -74,7 +74,7 @@
                                 <button type="button" onclick="adjustDuration(-1)" class="p-2 bg-gray-100 rounded-l-lg border border-gray-300 hover:bg-gray-200">
                                     <i class="fas fa-minus text-gray-500"></i>
                                 </button>
-                                <input type="number" name="lama_sewa" id="lama_sewa" 
+                                <input type="number" name="lama_sewa" id="lama_sewa"
                                     class="w-full text-center border-t border-b border-gray-300 focus:ring-0 z-10"
                                     value="1" min="1" readonly>
                                 <button type="button" onclick="adjustDuration(1)" class="p-2 bg-gray-100 rounded-r-lg border border-gray-300 hover:bg-gray-200">
@@ -99,9 +99,9 @@
                                 {{-- Opsi Dengan Supir (Looping) --}}
                                 @foreach($supirs as $supir)
                                 <label class="relative flex items-center p-4 border rounded-xl cursor-pointer hover:bg-gray-50 transition border-gray-200" id="label_driver_{{ $supir->id }}">
-                                    <input type="radio" name="supir_id" value="{{ $supir->id }}" 
-                                           data-price="{{ $supir->tarif_per_hari }}"
-                                           class="h-4 w-4 text-blue-600 focus:ring-blue-500" onchange="updateDriverOption(this)">
+                                    <input type="radio" name="supir_id" value="{{ $supir->id }}"
+                                        data-price="{{ $supir->tarif_per_hari }}"
+                                        class="h-4 w-4 text-blue-600 focus:ring-blue-500" onchange="updateDriverOption(this)">
                                     <div class="ml-3">
                                         <span class="block text-sm font-medium text-gray-900">Dengan Supir</span>
                                         <span class="block text-xs text-gray-500">+ Rp {{ number_format($supir->tarif_per_hari, 0, ',', '.') }}/hari</span>
@@ -149,13 +149,11 @@
     }
 
     function updateDriverOption(radio) {
-        // Reset styles
         document.querySelectorAll('label[id^="label_"]').forEach(el => {
             el.classList.remove('border-blue-500', 'bg-blue-50');
             el.classList.add('border-gray-200');
         });
 
-        // Add active style
         const activeLabel = radio.closest('label');
         activeLabel.classList.remove('border-gray-200');
         activeLabel.classList.add('border-blue-500', 'bg-blue-50');
@@ -166,8 +164,7 @@
     function calculateTotal() {
         const basePrice = parseInt(document.getElementById('base_price').value) || 0;
         const duration = parseInt(document.getElementById('lama_sewa').value) || 1;
-        
-        // Get selected driver price
+
         const driverRadio = document.querySelector('input[name="supir_id"]:checked');
         let driverPrice = 0;
         if (driverRadio && driverRadio.value !== "") {
@@ -177,13 +174,11 @@
         const totalDriverCost = driverPrice * duration;
         const totalCost = (basePrice * duration) + totalDriverCost;
 
-        // Update UI
         document.getElementById('summary_days').textContent = duration + ' Hari';
         document.getElementById('summary_driver').textContent = 'Rp ' + totalDriverCost.toLocaleString('id-ID');
         document.getElementById('total_price').textContent = 'Rp ' + totalCost.toLocaleString('id-ID');
     }
 
-    // Initialize on load
     document.addEventListener('DOMContentLoaded', calculateTotal);
 </script>
 @endsection

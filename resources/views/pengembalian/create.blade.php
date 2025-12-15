@@ -124,7 +124,6 @@
         const inputDenda = document.getElementById('denda');
         const inputTotal = document.getElementById('total_bayar_akhir');
         
-        // Elemen Info
         const infoBox = document.getElementById('infoBox');
         const infoMobil = document.getElementById('infoMobil');
         const infoPelanggan = document.getElementById('infoPelanggan');
@@ -141,20 +140,17 @@
                 return;
             }
 
-            // Ambil data
             const batasKembali = new Date(selectedOption.getAttribute('data-tgl-kembali'));
             const biayaAwal = parseFloat(selectedOption.getAttribute('data-total-awal'));
             const tarifMobil = parseFloat(selectedOption.getAttribute('data-tarif-mobil'));
             const tglAktual = new Date(inputTglAktual.value);
 
-            // Tampilkan Info Box
             infoBox.classList.remove('hidden');
             infoMobil.innerText = selectedOption.getAttribute('data-mobil');
             infoPelanggan.innerText = selectedOption.getAttribute('data-pelanggan');
             infoBatas.innerText = selectedOption.getAttribute('data-tgl-kembali');
             infoBiayaAwal.innerText = biayaAwal.toLocaleString('id-ID');
 
-            // Hitung Denda
             batasKembali.setHours(0,0,0,0);
             tglAktual.setHours(0,0,0,0);
 
@@ -170,10 +166,8 @@
                 infoTelat.classList.add('hidden');
             }
 
-            // Update Input
             inputDenda.value = dendaHitungan;
             
-            // Hitung Total (Biaya Awal + Denda Inputan)
             const dendaFinal = parseFloat(inputDenda.value) || 0;
             inputTotal.value = biayaAwal + dendaFinal;
         }
@@ -181,7 +175,6 @@
         selectPeminjaman.addEventListener('change', hitungBiaya);
         inputTglAktual.addEventListener('change', hitungBiaya);
         inputDenda.addEventListener('input', function() {
-            // Update total jika user edit denda manual
             const selectedOption = selectPeminjaman.selectedOptions[0];
             if (selectedOption) {
                 const biayaAwal = parseFloat(selectedOption.getAttribute('data-total-awal'));
