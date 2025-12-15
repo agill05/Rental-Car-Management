@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('mereks', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_merek'); // Contoh: Toyota, Honda
+            $table->string('nama_merek');
             $table->timestamps();
         });
     }

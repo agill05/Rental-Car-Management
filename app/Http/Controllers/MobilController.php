@@ -75,9 +75,8 @@ class MobilController extends Controller
 
         $data = $request->all();
 
-        $gambarPath = $mobil->gambar; // Keep old path if no new file
+        $gambarPath = $mobil->gambar;
         if ($request->hasFile('gambar')) {
-            // Hapus gambar lama jika ada
             if ($mobil->gambar && Storage::disk('public')->exists($mobil->gambar)) {
                 Storage::disk('public')->delete($mobil->gambar);
             }
@@ -91,7 +90,6 @@ class MobilController extends Controller
 
     public function destroy(Mobil $mobil)
     {
-        // Hapus gambar jika ada
         if ($mobil->gambar && Storage::disk('public')->exists($mobil->gambar)) {
             Storage::disk('public')->delete($mobil->gambar);
         }

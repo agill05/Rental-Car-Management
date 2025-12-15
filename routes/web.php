@@ -13,21 +13,15 @@ use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PengembalianController;
 use App\Http\Middleware\IsAdmin;
 
-// --- 1. HALAMAN PUBLIK & AUTH ---
 
 Route::get('/', [UserRentalController::class, 'index'])->name('home');
-
-// Route Auth (Login, Register, Logout)
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
-
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-// --- 2. HALAMAN USER (PELANGGAN) ---
 Route::middleware(['auth'])->group(function () {
     Route::get('/my-rentals', [UserRentalController::class, 'myRentals'])->name('my.rentals');
     Route::get('/rent/{mobil}', [UserRentalController::class, 'createRental'])->name('rental.create');
@@ -37,7 +31,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-// --- 3. HALAMAN ADMIN ---
 Route::middleware(['auth', IsAdmin::class])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');

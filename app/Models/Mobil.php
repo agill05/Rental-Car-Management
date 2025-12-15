@@ -13,7 +13,7 @@ class Mobil extends Model
         'no_polisi',
         'harga_per_hari',
         'status',
-        'gambar', // Field baru
+        'gambar',
         'tahun'
     ];
 

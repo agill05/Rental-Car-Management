@@ -11,23 +11,18 @@ class PengembalianController extends Controller
 {
     public function index()
     {
-        // Menampilkan semua riwayat pengembalian (terbaru di atas)
         $pengembalians = Pengembalian::with('peminjaman.pelanggan', 'peminjaman.mobil')
             ->latest()
             ->get();
-            
+
         return view('pengembalian.index', compact('pengembalians'));
     }
 
     public function create()
     {
-        // Admin bisa memproses peminjaman yang statusnya 'dipinjam', 'menunggu_persetujuan', atau 'menunggu_pengembalian'
         $peminjamans = Peminjaman::whereIn('status', ['dipinjam', 'menunggu_persetujuan', 'menunggu_pengembalian'])
             ->with('pelanggan', 'mobil')
             ->get();
-
-        // Jika ada parameter 'peminjaman_id' dari URL (misal dari tombol di dashboard/detail), kirim ke view
-        // View create akan otomatis memilih opsi tersebut
 
         return view('pengembalian.create', compact('peminjamans'));
     }
@@ -43,24 +38,19 @@ class PengembalianController extends Controller
         ]);
 
         $peminjaman = Peminjaman::findOrFail($request->peminjaman_id);
-        
-        // Cek validasi: jangan sampai memproses yang sudah dikembalikan
+
         if ($peminjaman->status === 'dikembalikan' || $peminjaman->pengembalian) {
             return back()->with('error', 'Transaksi ini sudah selesai sebelumnya.');
         }
 
-        // Jika status 'menunggu_pengembalian', ubah ke 'dipinjam' sebelum proses pengembalian
         if ($peminjaman->status === 'menunggu_pengembalian') {
             $peminjaman->update(['status' => 'dipinjam']);
         }
 
-        // Hitung Total Bayar Akhir (Server Side Calculation)
-        // Total = Harga Awal (Sewa x Hari) + Denda Keterlambatan + Biaya Kerusakan
-        $denda = $peminjaman->calculateFine(); // Auto calculate based on overdue days
+        $denda = $peminjaman->calculateFine();
         $biaya_kerusakan = $request->biaya_kerusakan ?? 0;
         $total_akhir = $peminjaman->harga_total + $denda + $biaya_kerusakan;
 
-        // 1. Simpan Data Pengembalian
         Pengembalian::create([
             'peminjaman_id' => $peminjaman->id,
             'tanggal_kembali_aktual' => $request->tanggal_kembali_aktual,
@@ -69,15 +59,12 @@ class PengembalianController extends Controller
             'catatan_kondisi' => $request->catatan_kondisi,
         ]);
 
-        // 2. Update Status Peminjaman -> Selesai
         $peminjaman->update(['status' => 'dikembalikan']);
 
-        // 3. Update Mobil -> Tersedia Kembali
         if ($peminjaman->mobil) {
             $peminjaman->mobil->update(['status' => 'tersedia']);
         }
 
-        // 4. Update Supir (jika ada) -> Tersedia Kembali
         if ($peminjaman->supir) {
             $peminjaman->supir->update(['status' => 'tersedia']);
         }
@@ -105,7 +92,6 @@ class PengembalianController extends Controller
             'catatan_kondisi' => 'nullable|string',
         ]);
 
-        // Recalculate denda if date changed
         $peminjaman = $pengembalian->peminjaman;
         $denda = $peminjaman->calculateFine();
         $biaya_kerusakan = $request->biaya_kerusakan ?? 0;
@@ -125,21 +111,15 @@ class PengembalianController extends Controller
 
     public function destroy(Pengembalian $pengembalian)
     {
-        // Fitur Rollback: Jika data pengembalian dihapus (karena salah input),
-        // kembalikan status mobil & peminjaman ke kondisi "sedang dipinjam".
-        
         $peminjaman = $pengembalian->peminjaman;
-        
+
         if ($peminjaman) {
-            // Kembalikan status peminjaman
             $peminjaman->update(['status' => 'dipinjam']);
-            
-            // Kembalikan status mobil jadi disewa
+
             if ($peminjaman->mobil) {
                 $peminjaman->mobil->update(['status' => 'disewa']);
             }
-            
-            // Kembalikan status supir jadi bertugas (jika ada)
+
             if ($peminjaman->supir) {
                 $peminjaman->supir->update(['status' => 'bertugas']);
             }

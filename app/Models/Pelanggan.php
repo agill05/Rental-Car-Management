@@ -14,13 +14,11 @@ class Pelanggan extends Model
         'alamat'
     ];
 
-    // Relasi ke User (Akun Login)
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Relasi ke Peminjaman (History Transaksi)
     public function peminjamans()
     {
         return $this->hasMany(Peminjaman::class);

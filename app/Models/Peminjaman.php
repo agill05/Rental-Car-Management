@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Peminjaman extends Model
 {
-    protected $table = 'peminjaman'; // Pastikan nama tabel benar (singular)
+    protected $table = 'peminjaman';
 
     protected $fillable = [
         'mobil_id',
@@ -14,9 +14,9 @@ class Peminjaman extends Model
         'supir_id',
         'tanggal_pinjam',
         'tanggal_kembali_rencana',
-        'lama_sewa',    // Kolom baru
-        'harga_total',  // Kolom baru
-        'status'        // Enum: dipinjam, menunggu_persetujuan, menunggu_pengembalian, dikembalikan
+        'lama_sewa',
+        'harga_total',
+        'status'
     ];
 
     public function mobil()
@@ -34,19 +34,16 @@ class Peminjaman extends Model
         return $this->belongsTo(Supir::class);
     }
 
-    // Relasi ke Pengembalian (One to One)
     public function pengembalian()
     {
         return $this->hasOne(Pengembalian::class);
     }
 
-    // Method to check if rental is overdue
     public function isOverdue()
     {
         return now()->gt(\Carbon\Carbon::parse($this->tanggal_kembali_rencana));
     }
 
-    // Method to calculate fine for overdue days
     public function calculateFine()
     {
         if (!$this->isOverdue()) {
@@ -54,6 +51,6 @@ class Peminjaman extends Model
         }
 
         $overdueDays = \Carbon\Carbon::parse($this->tanggal_kembali_rencana)->diffInDays(now());
-        return $overdueDays * 50000; // 50,000 per day
+        return $overdueDays * 50000;
     }
 }

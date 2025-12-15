@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
-    // --- LOGIN ---
     public function showLoginForm()
     {
         return view('auth.login');
@@ -26,8 +25,6 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
-            // Redirect berdasarkan Role
             if (Auth::user()->role === 'admin') {
                 return redirect()->route('dashboard');
             }
@@ -40,7 +37,6 @@ class AuthController extends Controller
         ]);
     }
 
-    // --- REGISTER ---
     public function showRegisterForm()
     {
         return view('auth.register');
@@ -57,17 +53,14 @@ class AuthController extends Controller
             'alamat' => 'required',
         ]);
 
-        // Gunakan Transaksi Database agar data konsisten
         DB::transaction(function () use ($request) {
-            // 1. Buat User (Akun Login)
             $user = User::create([
                 'name' => $request->nama,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'role' => 'user', // Default user biasa
+                'role' => 'user',
             ]);
 
-            // 2. Buat Data Pelanggan (Profil)
             Pelanggan::create([
                 'user_id' => $user->id,
                 'nama' => $request->nama,
@@ -76,14 +69,12 @@ class AuthController extends Controller
                 'alamat' => $request->alamat,
             ]);
             
-            // Login otomatis setelah daftar
             Auth::login($user);
         });
 
         return redirect()->route('home');
     }
 
-    // --- LOGOUT ---
     public function logout(Request $request)
     {
         Auth::logout();

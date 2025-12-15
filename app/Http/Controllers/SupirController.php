@@ -67,9 +67,8 @@ class SupirController extends Controller
 
         $data = $request->all();
 
-        $fotoPath = $supir->foto; // Keep old path if no new file
+        $fotoPath = $supir->foto;
         if ($request->hasFile('foto')) {
-            // Hapus foto lama jika ada
             if ($supir->foto && Storage::disk('public')->exists($supir->foto)) {
                 Storage::disk('public')->delete($supir->foto);
             }
@@ -83,7 +82,6 @@ class SupirController extends Controller
 
     public function destroy(Supir $supir)
     {
-        // Hapus foto jika ada
         if ($supir->foto && Storage::disk('public')->exists($supir->foto)) {
             Storage::disk('public')->delete($supir->foto);
         }

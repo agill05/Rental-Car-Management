@@ -13,6 +13,6 @@ class Supir extends Model
         'alamat',
         'tarif_per_hari',
         'status',
-        'foto' // Field baru
+        'foto'
     ];
 }

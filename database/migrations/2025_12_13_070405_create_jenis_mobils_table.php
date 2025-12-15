@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('jenis_mobils', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_jenis'); // Contoh: SUV, Sedan, MPV
+            $table->string('nama_jenis');
             $table->timestamps();
         });
     }

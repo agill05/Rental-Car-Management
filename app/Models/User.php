@@ -46,13 +46,11 @@ class User extends Authenticatable
         ];
     }
 
-    // Relasi: Satu User memiliki satu data Pelanggan
     public function pelanggan()
     {
         return $this->hasOne(Pelanggan::class);
     }
 
-    // Helper untuk mengecek apakah user adalah admin
     public function isAdmin()
     {
         return $this->role === 'admin';

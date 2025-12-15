@@ -14,8 +14,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            
-            // PENTING: Kolom Role untuk membedakan Admin dan Pelanggan
+
             $table->enum('role', ['admin', 'user'])->default('user');
             
             $table->rememberToken();

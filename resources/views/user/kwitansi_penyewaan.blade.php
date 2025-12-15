@@ -23,7 +23,6 @@
             background-color: #fff;
         }
 
-        /* Header Layout */
         .invoice-box table {
             width: 100%;
             line-height: inherit;
@@ -51,7 +50,6 @@
             padding-bottom: 40px;
         }
 
-        /* Heading Styles */
         .invoice-box table tr.heading td {
             background: #eee;
             border-bottom: 1px solid #ddd;
@@ -84,7 +82,6 @@
             text-align: center;
         }
 
-        /* Signature Section */
         .signature-section {
             margin-top: 50px;
             display: flex;
@@ -110,7 +107,6 @@
             letter-spacing: 1px;
         }
 
-        /* Button Style */
         .print-button {
             display: block;
             margin: 20px auto;
@@ -129,7 +125,6 @@
             background-color: #1a252f;
         }
 
-        /* Print Media Query */
         @media print {
             body { 
                 background-color: #fff; 

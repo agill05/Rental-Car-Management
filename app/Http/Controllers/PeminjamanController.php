@@ -12,7 +12,6 @@ class PeminjamanController extends Controller
 {
     public function index()
     {
-        // Admin melihat semua transaksi
         $peminjamans = Peminjaman::with('mobil', 'pelanggan', 'supir')->latest()->get();
         return view('peminjaman.index', compact('peminjamans'));
     }

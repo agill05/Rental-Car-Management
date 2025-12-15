@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('peminjaman', function (Blueprint $table) {
             $table->id();
             
-            // Relasi ke tabel lain
             $table->foreignId('mobil_id')->constrained('mobils');
             $table->foreignId('pelanggan_id')->constrained('pelanggans');
             $table->foreignId('supir_id')->nullable()->constrained('supirs');
@@ -22,7 +21,6 @@ return new class extends Migration
             $table->integer('lama_sewa');
             $table->decimal('harga_total', 12, 2);
             
-            // PENTING: Status harus mencakup 'menunggu_persetujuan'
             $table->enum('status', ['dipinjam', 'menunggu_persetujuan', 'dikembalikan'])->default('dipinjam');
             
             $table->timestamps();

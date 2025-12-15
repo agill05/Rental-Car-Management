@@ -10,11 +10,10 @@ return new class extends Migration
     {
         Schema::create('mobils', function (Blueprint $table) {
             $table->id();
-            // Foreign Keys
             $table->foreignId('merek_id')->constrained('mereks');
             $table->foreignId('jenis_mobil_id')->constrained('jenis_mobils');
             $table->integer('tahun');
-            $table->string('nama_mobil'); // Contoh: Avanza Veloz
+            $table->string('nama_mobil');
             $table->string('no_polisi')->unique();
             $table->decimal('harga_per_hari', 10, 2);
             $table->enum('status', ['tersedia', 'disewa'])->default('tersedia');
