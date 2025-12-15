@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('no_polisi')->unique();
             $table->decimal('harga_per_hari', 10, 2);
             $table->enum('status', ['tersedia', 'disewa'])->default('tersedia');
+            $table->string('gambar')->nullable();
             $table->timestamps();
         });
     }

@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('no_hp');
             $table->enum('status', ['tersedia', 'bertugas'])->default('tersedia');
+            $table->string('foto')->nullable();
             $table->timestamps();
         });
     }

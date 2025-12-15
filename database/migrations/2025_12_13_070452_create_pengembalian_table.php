@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('pengembalian', function (Blueprint $table) {
             $table->id();
             $table->foreignId('peminjaman_id')->constrained('peminjaman');
-
             $table->date('tanggal_kembali_aktual');
             $table->decimal('denda', 12, 2)->default(0); 
             $table->decimal('total_bayar_akhir', 12, 2); 
